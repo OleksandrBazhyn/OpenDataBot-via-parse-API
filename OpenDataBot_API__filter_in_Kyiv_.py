@@ -1,3 +1,3 @@
 import OpenDataBotAPI
-
-
+codes = {43419739, 33247594, 43153314}
+OpenDataBotAPI(43419739)
