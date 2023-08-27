@@ -45,14 +45,8 @@ class OpenDataBotShortNote():
         url = 'https://opendatabot.ua/c/' + code + '?from=search'
         page = soup(url)
         self.code = code
-
-        if page is None:
-            print(f"Не вдалося завантажити сторінку для коду {code}")
-            return
-            name_element = page.find('h1', class_='text-break')
-            if name_element:
-                self.name = name_element.get_text()
-
+        if(page is not None): #FIX CRITERIOUS OF FINDING STATMENTS VALUE?
+            self.name = page.find('h1').get_text()
 
             cols12 = page.find_all('div', class_='col-12 col print-responsive')
             for col12 in cols12:

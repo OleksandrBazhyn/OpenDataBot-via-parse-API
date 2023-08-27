@@ -58,15 +58,13 @@ def save_potential_clients(codes):
                 if test_company.registered:
                     print(test_company.code + '\t is ' + str(test_company.registered))
 
-                    # Перевірка наявності даних перед записом
-                    if test_company.name and test_company.email and test_company.phones and test_company.address:
-                        add_company_to_csv(
-                            test_company.code,
-                            test_company.name,
-                            test_company.email,
-                            test_company.phones,
-                            test_company.address
-                        )
+                    add_company_to_csv(
+                        test_company.code,
+                        test_company.name,
+                        test_company.email,
+                        test_company.phones,
+                        test_company.address
+                    )
         except Exception as e:
             print(f'Помилка обробки компанії {one}: {str(e)}')
             add_problem_code(one)
