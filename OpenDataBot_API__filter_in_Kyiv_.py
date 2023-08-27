@@ -10,7 +10,7 @@ with open('db\\input\\1.html', 'r', encoding='cp1251') as htmlDB:
     contents = htmlDB.read()
     soup = BS(contents, 'html.parser')
 
-    soup = soup.find_all('td', class_='s4', limit=50)
+    soup = soup.find_all('td', class_='s4')
     for el in soup:
         codes.append(el.get_text())
     codes = list(filter(None, codes))
