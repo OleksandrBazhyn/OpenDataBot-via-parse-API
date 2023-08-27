@@ -37,7 +37,7 @@ class OpenDataBotShortNote():
     name = ''
     address = ''
     phones = []
-    emails = []
+    email = ''
     registered = False
 
     def __init__(self, code):
@@ -45,9 +45,19 @@ class OpenDataBotShortNote():
         url = 'https://opendatabot.ua/c/' + code + '?from=search'
         page = soup(url)
         self.code = code
-        if(page is not None): #FIX CRITERIOUS OF FINDING STATMENTS VALUE?
-            self.name = page.find('h1').get_text()
-            self.address = page.find_all(class_='col-12 col print-responsive', limit=3)[2].find('p').get_text()
+
+        if page is None:
+            print(f"Не вдалося завантажити сторінку для коду {code}")
+            return
+            name_element = page.find('h1', class_='text-break')
+            if name_element:
+                self.name = name_element.get_text()
+
+
+            cols12 = page.find_all('div', class_='col-12 col print-responsive')
+            for col12 in cols12:
+                if "Адреса" in col12.find('div', class_='small text-black-50'):
+                    self.address = col12.find('p').get_text()
 
             # Знайдіть всі теги, де атрибут href починається з "tel:"
             phone_links = page.find_all('a', href=re.compile(r'^tel:'))
@@ -67,18 +77,14 @@ class OpenDataBotShortNote():
 
             records = page.find_all(class_='col-sm-4 col-6 col print-responsive')
 
-            email_pattern = re.compile(r'\S+@\S+')
-            for p in records:
-                text = p.get_text()
-                if re.search(email_pattern, text):
-                    self.emails = re.search(email_pattern, text).group()
-            
-            # Проходимо по всіх записах у масиві
             for record in records:
-                # Перевіряємо, чи містить поточний запис слово "Зареєстровано"
-                if "Зареєстровано" in record.find('p').get_text():
-                    self.registered = True
-                    break  # Якщо знайдено, можна завершити цикл
+                if "Пошта" in record.find('div', class_='small text-black-50'):
+                    self.email = record.find('p').get_text()
+            
+
+            for record in records:
+                if "Стан" in record.find('div', class_='small text-black-50'):
+                    self.registered = record.find('p').get_text()
     
 class OpenDataBotLongNote(OpenDataBotShortNote):
     updatedTime = ""
