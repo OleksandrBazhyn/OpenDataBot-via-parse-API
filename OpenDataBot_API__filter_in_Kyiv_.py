@@ -6,17 +6,21 @@ import csv
 codes = []
 
 # INPUT
-with open('db\\input\\1.html', 'r', encoding='cp1251') as htmlDB:
-    contents = htmlDB.read()
-    soup = BS(contents, 'html.parser')
+#with open('db\\input\\1.html', 'r', encoding='cp1251') as inputDB:
+#    contents = inputDB.read()
+#    soup = BS(contents, 'html.parser')
 
-    soup = soup.find_all('td', class_='s4')
-    for el in soup:
-        codes.append(el.get_text())
-    codes = list(filter(None, codes))
+#    soup = soup.find_all('td', class_='s0')
+#    for el in soup:
+#        codes.append(el.get_text())
+#    codes = list(filter(None, codes))
 
-    # DEBUG
-    print('WE GOT INPUT\n')
+#    # DEBUG
+#    print('WE GOT INPUT\n')
+
+with open('db\\input\\2.txt', 'r') as inputDB:
+    for line in inputDB:
+        codes.append(line.strip())
 
 output_file_path = 'db\\output\\output.csv'
 
@@ -54,17 +58,27 @@ def save_potential_clients(codes):
             # DEBUG
             print(f'-----------{test_company.code}')
 
-            if "Київ" in test_company.address or "Київська" in test_company.address:
-                if test_company.registered:
-                    print(test_company.code + '\t is ' + str(test_company.registered))
+            #if "Київ" in test_company.address or "Київська" in test_company.address:
+            #    if test_company.registered:
+            #        print(test_company.code + '\t is ' + str(test_company.registered))
 
-                    add_company_to_csv(
-                        test_company.code,
-                        test_company.name,
-                        test_company.email,
-                        test_company.phones,
-                        test_company.address
-                    )
+            #        add_company_to_csv(
+            #            test_company.code,
+            #            test_company.name,
+            #            test_company.email,
+            #            test_company.phones,
+            #            test_company.address
+            #        )
+            if test_company.registered:
+                print(test_company.code + '\t is ' + str(test_company.registered))
+
+                add_company_to_csv(
+                    test_company.code,
+                    test_company.name,
+                    test_company.email,
+                    test_company.phones,
+                    test_company.address
+                )
         except Exception as e:
             print(f'Помилка обробки компанії {one}: {str(e)}')
             add_problem_code(one)

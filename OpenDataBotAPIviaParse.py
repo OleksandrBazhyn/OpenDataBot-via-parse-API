@@ -50,7 +50,7 @@ class OpenDataBotShortNote():
 
             cols12 = page.find_all('div', class_='col-12 col print-responsive')
             for col12 in cols12:
-                if "Адреса" in col12.find('div', class_='small text-black-50'):
+                if re.search(r'\bАдреса\b', col12.contents[1].contents[0]):
                     self.address = col12.find('p').get_text()
 
             # Знайдіть всі теги, де атрибут href починається з "tel:"
@@ -72,12 +72,12 @@ class OpenDataBotShortNote():
             records = page.find_all(class_='col-sm-4 col-6 col print-responsive')
 
             for record in records:
-                if "Пошта" in record.find('div', class_='small text-black-50'):
+                if re.search(r'\bПошта\b', record.contents[1].contents[0]):
                     self.email = record.find('p').get_text()
             
 
             for record in records:
-                if "Стан" in record.find('div', class_='small text-black-50'):
+                if re.search(r'\bСтан\b', record.contents[1].contents[0]):
                     self.registered = record.find('p').get_text()
     
 class OpenDataBotLongNote(OpenDataBotShortNote):
