@@ -4,7 +4,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>636493f2-8d33-44d1-b5ed-bb7f356e5d0d</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>OpenDataBot_API__filter_in_Kyiv_.py</StartupFile>
+    <StartupFile>main.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>
@@ -21,8 +21,11 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="OpenDataBotAPIviaParse.py" />
-    <Compile Include="OpenDataBot_API__filter_in_Kyiv_.py" />
+    <Compile Include="Client.py" />
+    <Compile Include="Parser.py" />
+    <Compile Include="UakeyClient.py" />
+    <Compile Include="OpenDataBotObject.py" />
+    <Compile Include="main.py" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\Python Tools\Microsoft.PythonTools.targets" />
   <!-- Uncomment the CoreCompile target to enable the Build command in

@@ -1,6 +1,8 @@
 # coding: cp1251
-import OpenDataBotAPIviaParse
-from bs4 import BeautifulSoup as BS
+import OpenDataBotObject
+import UakeyClient
+import Client
+#from bs4 import BeautifulSoup as BS
 import csv
 
 codes = []
@@ -28,16 +30,17 @@ output_file_path = 'db\\output\\output.csv'
 with open(output_file_path, 'w', newline='', encoding='utf-8') as clear_file:
     pass  # Записуємо нічого, тобто очищаємо файл
 
-def add_company_to_csv(code, name, email, phones, address):
+def add_company_to_csv(code, name, emails, phones, registered):
     with open(output_file_path, 'a', newline='', encoding='utf-8') as csv_file:
         csv_writer = csv.writer(csv_file)
 
         # Записуємо рядок заголовку, якщо файл порожній
         if csv_file.tell() == 0:
-            csv_writer.writerow(['code', 'name', 'email', 'phones', 'address'])
+            csv_writer.writerow(['code', 'name', 'email', 'phones', 'registered'])
 
         phones_str = ', '.join(phones)
-        row = [code, name, email, phones_str, address]
+        emails_str = ', '.join(emails)
+        row = [code, name, emails_str, phones_str, registered]
         csv_writer.writerow(row)
         csv_file.flush()  # Забезпечуємо негайний запис даних
         # DEBUG
@@ -54,33 +57,35 @@ def add_problem_code(code):
 def save_potential_clients(codes):
     for one in codes:
         try:
-            test_company = OpenDataBotAPIviaParse.OpenDataBotShortNote(one)
+            client_in_OpenDataBot = OpenDataBotObject.OpenDataBotShortNote(one)
+
+            client_in_Uakey = UakeyClient.UakeyClient(one)
+
+            client = Client.Client(client_in_Uakey, client_in_OpenDataBot)
+
             # DEBUG
-            print(f'-----------{test_company.code}')
+            print(f'-----------{one}')
 
-            #if "Київ" in test_company.address or "Київська" in test_company.address:
-            #    if test_company.registered:
-            #        print(test_company.code + '\t is ' + str(test_company.registered))
 
-            #        add_company_to_csv(
-            #            test_company.code,
-            #            test_company.name,
-            #            test_company.email,
-            #            test_company.phones,
-            #            test_company.address
-            #        )
-            if test_company.registered:
-                print(test_company.code + '\t is ' + str(test_company.registered))
+            print(one + '\t ' + str(client.registered))
 
-                add_company_to_csv(
-                    test_company.code,
-                    test_company.name,
-                    test_company.email,
-                    test_company.phones,
-                    test_company.address
-                )
+            add_company_to_csv(
+                client.code,
+                client.name,
+                client.emails,
+                client.phones,
+                client.registered
+            )
         except Exception as e:
+            print(f'-----------{one}')
             print(f'Помилка обробки компанії {one}: {str(e)}')
+            add_company_to_csv(
+                one,
+                '',
+                '',
+                '',
+                ''
+            )
             add_problem_code(one)
 
     # DEBUG
